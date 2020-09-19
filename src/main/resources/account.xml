@@ -4,9 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="advanced-calc" class="app.homework1.AdvancedCalculator" />
-    <bean id="simple-calc" class="app.homework1.SimpleCalculator" />
-    <bean id="task" class="app.homework1.FileTaskRepository" />
-
+    <bean id="store" class="app.homework2.AccountStore" />
+    <bean id="account-service" class="app.homework2.AccountServiceImpl" />
 
 </beans>
