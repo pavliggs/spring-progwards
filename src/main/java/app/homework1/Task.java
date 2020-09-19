@@ -1,4 +1,4 @@
-package app;
+package app.homework1;
 
 public class Task {
     private String id;
