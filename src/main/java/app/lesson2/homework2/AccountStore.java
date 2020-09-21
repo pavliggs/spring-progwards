@@ -1,4 +1,4 @@
-package app.homework2;
+package app.lesson2.homework2;
 
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;

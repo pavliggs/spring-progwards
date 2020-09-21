@@ -1,7 +1,7 @@
-package app.homework2;
+package app.lesson2.homework2;
 
-import app.homework2.exceptions.NotEnoughMoneyException;
-import app.homework2.exceptions.UnknownAccountException;
+import app.lesson2.homework2.exceptions.NotEnoughMoneyException;
+import app.lesson2.homework2.exceptions.UnknownAccountException;
 
 public interface AccountService {
     void withdraw(int accountId, int amount) throws NotEnoughMoneyException, UnknownAccountException;

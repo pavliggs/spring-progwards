@@ -1,4 +1,4 @@
-package app.homework1;
+package app.lesson1.homework1;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="store" class="app.homework2.AccountStore" />
-    <bean id="account-service" class="app.homework2.AccountServiceImpl" />
+    <bean id="store" class="app.lesson2.homework2.AccountStore" />
+    <bean id="account-service" class="app.lesson2.homework2.AccountServiceImpl" />
 
 </beans>

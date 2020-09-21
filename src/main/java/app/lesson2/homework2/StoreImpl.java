@@ -1,4 +1,4 @@
-package app.homework2;
+package app.lesson2.homework2;
 
 import com.google.gson.Gson;
 
@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class StoreImpl<K,V extends AccountInterface<K>> implements Store<V> {
     private final static String DB_PATH = "C:\\Users\\Эльдорадо\\IdeaProjects\\spring-progwards\\accounts.json";
-    private final Map<K,V> values = new ConcurrentHashMap<>();
+    private final Map<K,V> mapValues = new ConcurrentHashMap<>();
     private final Type type;
 
     public StoreImpl(Type type) {
@@ -29,17 +28,15 @@ public class StoreImpl<K,V extends AccountInterface<K>> implements Store<V> {
         }
     }
 
-    public Map<K,V> getValues() {
-        return values;
+    public Map<K, V> getMapValues() {
+        return mapValues;
     }
 
     @Override
     public void write(V item) {
         read();
-        values.put(item.getId(), item);
-//        if (value != null)
-//            values.remove(value.getId(), value);
-        List<V> listValues = new ArrayList<>(values.values());
+        mapValues.put(item.getId(), item);
+        List<V> listValues = new ArrayList<>(mapValues.values());
         String json = new Gson().toJson(listValues);
         try {
             Files.writeString(Paths.get(DB_PATH), json);
@@ -56,7 +53,7 @@ public class StoreImpl<K,V extends AccountInterface<K>> implements Store<V> {
             if (json.equals(""))
                 return listValues;
             listValues = new Gson().fromJson(json, type);
-            listValues.forEach(e -> values.put(e.getId(), e));
+            listValues.forEach(e -> mapValues.put(e.getId(), e));
             return listValues;
         } catch (IOException ex) {
             ex.printStackTrace();
