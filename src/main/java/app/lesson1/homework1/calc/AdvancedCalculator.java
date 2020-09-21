@@ -1,4 +1,4 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.calc;
 
 public class AdvancedCalculator implements ICalculator{
 

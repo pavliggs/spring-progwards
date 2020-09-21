@@ -1,4 +1,4 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.calc;
 
 public interface ICalculator {
     int sum(int a, int b);

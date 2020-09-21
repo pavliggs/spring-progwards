@@ -1,9 +1,9 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.tasks;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,13 +13,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class FileTaskRepository implements TaskRepository {
-    static final String PATH = "C:\\Users\\Эльдорадо\\IdeaProjects\\spring-progwards\\task.json";
-    private Map<String, Task> taskMap = new ConcurrentHashMap();
+public class ObjectWithIdRepositoryImpl<K,V extends ObjectWithId<K>> implements ObjectWithIdRepository<K,V> {
+    static final String PATH = "C:\\Users\\Эльдорадо\\IdeaProjects\\spring-progwards\\";
+    private final Map<K, V> map = new ConcurrentHashMap();
 
-    public FileTaskRepository() {
+    private Type type;
+    private String fileRepository;
+
+    public ObjectWithIdRepositoryImpl(Type type, String fileRepository) {
+        this.type = type;
+        this.fileRepository = fileRepository;
         try {
-            Path path = Paths.get(PATH);
+            Path path = Paths.get(PATH + fileRepository);
             if (!Files.exists(path)) {
                 Files.createFile(path);
                 saveAll();
@@ -29,17 +34,17 @@ public class FileTaskRepository implements TaskRepository {
         }
     }
 
-    public List<Task> getAll() {
-        return this.taskMap.values().stream().collect(Collectors.toUnmodifiableList());
+    public List<V> getAll() {
+        return this.map.values().stream().collect(Collectors.toUnmodifiableList());
     }
 
     public void readAll() throws IOException {
         synchronized(this) {
-            this.taskMap.clear();
-            String json = Files.readString(Path.of(PATH));
-            ArrayList<Task> list = new Gson().fromJson(json, (new TypeToken<ArrayList<Task>>() {}).getType());
+            this.map.clear();
+            String json = Files.readString(Path.of(PATH + fileRepository));
+            ArrayList<V> list = new Gson().fromJson(json, type);
             list.forEach((e) -> {
-                this.taskMap.put(e.getId(), e);
+                this.map.put(e.getId(), e);
             });
         }
     }
@@ -47,19 +52,19 @@ public class FileTaskRepository implements TaskRepository {
     public void saveAll() throws IOException {
         synchronized(this) {
             String json = new Gson().toJson(this.getAll());
-            Files.writeString(Path.of(PATH), json);
+            Files.writeString(Path.of(PATH + fileRepository), json);
         }
     }
 
     @Override
-    public void save(Task task) {
+    public void save(V item) {
         try {
             readAll();
-            Task value = this.taskMap.put(task.getId(), task);
+            V value = this.map.put(item.getId(), item);
             if (value == null)
                 saveAll();
             else
-                System.out.println("Задача с ID=" + task.getId() + " уже существует в списке задач. " +
+                System.out.println("Объект с ID=" + item.getId() + " уже существует в списке объектов. " +
                         "Попробуйте воспользоваться операцией UPDATE");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -67,15 +72,15 @@ public class FileTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void update(Task task) {
+    public void update(V item) {
         try {
             readAll();
-            Task value = this.taskMap.remove(task.getId());
+            V value = this.map.remove(item.getId());
             saveAll();
             if (value != null)
-                save(task);
+                save(item);
             else
-                System.out.println("Задача с ID=" + task.getId() + " не существует в списке задач. " +
+                System.out.println("Объект с ID=" + item.getId() + " не существует в списке объектов. " +
                         "Воспользуйтесь операцией SAVE");
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -83,21 +88,22 @@ public class FileTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(K id) {
         try {
             readAll();
-            Task value = this.taskMap.remove(id);
+            V value = this.map.remove(id);
             if (value != null)
                 saveAll();
             else
-                System.out.println("Задача с ID=" + id + " не существует в списке задач");
+                System.out.println("Объект с ID=" + id + " не существует в списке объектов");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+
     @Override
-    public List<Task> get() {
+    public List<V> get() {
         try {
             readAll();
         } catch (IOException e) {
@@ -107,14 +113,14 @@ public class FileTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Task get(String id) {
+    public V get(K id) {
         try {
             readAll();
-            Task value = this.taskMap.get(id);
+            V value = this.map.get(id);
             if (value != null)
                 return value;
             else
-                System.out.println("Задача с ID=" + id + " не существует в списке задач");
+                System.out.println("Объект с ID=" + id + " не существует в списке объектов");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

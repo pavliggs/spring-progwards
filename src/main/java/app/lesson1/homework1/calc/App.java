@@ -1,4 +1,4 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.calc;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

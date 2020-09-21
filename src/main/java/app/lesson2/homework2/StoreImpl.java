@@ -34,30 +34,34 @@ public class StoreImpl<K,V extends AccountInterface<K>> implements Store<V> {
 
     @Override
     public void write(V item) {
-        read();
-        mapValues.put(item.getId(), item);
-        List<V> listValues = new ArrayList<>(mapValues.values());
-        String json = new Gson().toJson(listValues);
-        try {
-            Files.writeString(Paths.get(DB_PATH), json);
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (this) {
+            read();
+            mapValues.put(item.getId(), item);
+            List<V> listValues = new ArrayList<>(mapValues.values());
+            String json = new Gson().toJson(listValues);
+            try {
+                Files.writeString(Paths.get(DB_PATH), json);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public List<V> read() {
-        try {
-            String json = Files.readString(Paths.get(DB_PATH));
-            List<V> listValues = new ArrayList<>();
-            if (json.equals(""))
+        synchronized (this) {
+            try {
+                String json = Files.readString(Paths.get(DB_PATH));
+                List<V> listValues = new ArrayList<>();
+                if (json.equals(""))
+                    return listValues;
+                listValues = new Gson().fromJson(json, type);
+                listValues.forEach(e -> mapValues.put(e.getId(), e));
                 return listValues;
-            listValues = new Gson().fromJson(json, type);
-            listValues.forEach(e -> mapValues.put(e.getId(), e));
-            return listValues;
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return null;
         }
-        return null;
     }
 }

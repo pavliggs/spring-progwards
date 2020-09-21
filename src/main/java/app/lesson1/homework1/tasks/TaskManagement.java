@@ -1,4 +1,4 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.tasks;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -26,14 +26,14 @@ public class TaskManagement {
             string = scanner.nextLine();
             if (string.trim().equals("1"))
                 createAndAddTask(scanner);
-            if (string.trim().equals("2"))
+            else if (string.trim().equals("2"))
                 updateTask(scanner);
-            if (string.trim().equals("3"))
+            else if (string.trim().equals("3"))
                 deleteTask(scanner);
-            if (string.trim().equals("4")) {
+            else if (string.trim().equals("4")) {
                 snowListTask(scanner);
             } else
-                System.out.println(string);
+                System.out.println("Операции " + string + " не существует");
         }
     }
 
@@ -42,7 +42,6 @@ public class TaskManagement {
         taskList.forEach(e -> {
             System.out.println(e + "\n");
         });
-        System.out.println("список");
     }
 
     private static void deleteTask(Scanner scanner) {

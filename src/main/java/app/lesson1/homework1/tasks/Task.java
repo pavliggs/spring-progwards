@@ -1,6 +1,6 @@
-package app.lesson1.homework1;
+package app.lesson1.homework1.tasks;
 
-public class Task {
+public class Task implements ObjectWithId<String> {
     private String id;
     private String description;
     private String author;
