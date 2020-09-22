@@ -1,12 +1,14 @@
 package app.lesson1.homework1.calc;
 
+import app.lesson3.Config;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class App {
+public class MainCalculator {
     static final String PATH_CONTEXT = "C:\\Users\\Эльдорадо\\IdeaProjects\\spring-progwards\\" +
             "src\\main\\resources\\context.xml";
     static String numberOne;
@@ -46,9 +48,9 @@ public class App {
         String text = scanner.nextLine();
         ICalculator calculator = null;
         if (text.equals("simple")) {
-            calculator = initCalculator("simple-calc");
+            calculator = initCalculator(SimpleCalculator.class);
         } else if (text.equals("advanced")) {
-            calculator = initCalculator("advanced-calc");
+            calculator = initCalculator(AdvancedCalculator.class);
         } else {
             System.out.println("Такого калькулятора не существует");
             return;
@@ -71,9 +73,11 @@ public class App {
                     calculator.div(Integer.parseInt(numberOne), Integer.parseInt(numberTwo)));
     }
 
-    private static ICalculator initCalculator(String id) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
-        return context.getBean(id, ICalculator.class);
+    private static ICalculator initCalculator(Class<?> clazz) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(ConfigCalculator.class);
+        context.refresh();
+        return (ICalculator) context.getBean(clazz);
     }
 
     public static void main(String[] args) throws IOException {
