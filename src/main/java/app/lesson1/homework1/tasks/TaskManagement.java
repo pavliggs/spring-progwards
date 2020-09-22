@@ -1,7 +1,6 @@
 package app.lesson1.homework1.tasks;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +11,9 @@ public class TaskManagement {
     private static TaskRepository taskRepository;
 
     public static void init() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(ConfigTask.class);
+        context.refresh();
         taskRepository = context.getBean(TaskRepository.class);
     }
 
@@ -31,13 +32,13 @@ public class TaskManagement {
             else if (string.trim().equals("3"))
                 deleteTask(scanner);
             else if (string.trim().equals("4")) {
-                snowListTask(scanner);
+                showListTask(scanner);
             } else
                 System.out.println("Операции " + string + " не существует");
         }
     }
 
-    private static void snowListTask(Scanner scanner) {
+    private static void showListTask(Scanner scanner) {
         List<Task> taskList = taskRepository.get();
         taskList.forEach(e -> {
             System.out.println(e + "\n");

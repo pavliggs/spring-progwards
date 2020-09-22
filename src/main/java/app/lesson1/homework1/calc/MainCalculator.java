@@ -1,8 +1,12 @@
 package app.lesson1.homework1.calc;
 
 import app.lesson3.Config;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
@@ -44,7 +48,7 @@ public class MainCalculator {
     }
 
     private static void runMethod(String method, Scanner scanner) {
-        System.out.println("Введите тип калькулятора (калькулятор может быть simple или advanced)");
+        System.out.println("Введите тип калькулятора (калькулятор может быть \"simple\" или \"advanced\")");
         String text = scanner.nextLine();
         ICalculator calculator = null;
         if (text.equals("simple")) {
@@ -78,6 +82,12 @@ public class MainCalculator {
         context.register(ConfigCalculator.class);
         context.refresh();
         return (ICalculator) context.getBean(clazz);
+    }
+
+    // метод срабатывает когда у контекста вызывается метод refresh()
+    @EventListener
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        System.out.println("Context refresh");
     }
 
     public static void main(String[] args) throws IOException {

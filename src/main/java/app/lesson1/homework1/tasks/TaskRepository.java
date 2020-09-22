@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TaskRepository extends ObjectWithIdRepositoryImpl<String, Task> {
 
-    private TaskRepository() {
+    public TaskRepository() {
         super((new TypeToken<ArrayList<Task>>(){}).getType(), "task.json");
     }
 }

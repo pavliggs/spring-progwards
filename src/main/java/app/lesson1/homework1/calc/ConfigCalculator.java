@@ -15,4 +15,8 @@ public class ConfigCalculator {
     public ICalculator getAdvancedCalculator() {
         return new AdvancedCalculator();
     }
+
+    @Bean MainCalculator getMainCalculator() {
+        return new MainCalculator();
+    }
 }

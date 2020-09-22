@@ -11,10 +11,6 @@ public class AccountServiceImpl implements AccountService, ApplicationContextAwa
     private ApplicationContext context;
     private AccountStore store;
 
-    public AccountServiceImpl() {
-        System.out.println("AccountServiceImpl constructor");
-    }
-
     @Override
     public void withdraw(int accountId, int amount) throws NotEnoughMoneyException, UnknownAccountException {
         store.read();

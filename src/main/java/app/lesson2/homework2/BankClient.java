@@ -2,12 +2,9 @@ package app.lesson2.homework2;
 
 import app.lesson2.homework2.exceptions.NotEnoughMoneyException;
 import app.lesson2.homework2.exceptions.UnknownAccountException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 
 public class BankClient {
@@ -15,7 +12,9 @@ public class BankClient {
             "3. deposit [id] [amount]", "4. transfer [idFrom] [idTo] [amount]");
 
     public static void operationsManagement() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("account.xml");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(ConfigAccount.class);
+        context.refresh();
         AccountService service = context.getBean(AccountService.class);
 
         System.out.println("Доступные операции:");
